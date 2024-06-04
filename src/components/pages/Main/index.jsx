@@ -12,6 +12,7 @@ import useAction from "../../../hooks/useAction";
 import { doctors, sortSelect, sortDirect } from "../../../constants";
 import { StyledWrapper } from "./style";
 import FilterAppointment from "../../FilterAppointment";
+import withAuth from "../../HOC";
 
 const Main = () => {
   const [newAppointment, setNewAppointment] = useState({
@@ -389,4 +390,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default withAuth(Main);
