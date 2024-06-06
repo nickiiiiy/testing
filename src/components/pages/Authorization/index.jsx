@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
+
 import Header from "../../Header";
 import FormData from "../../FormData";
 import CustomInput from "../../CustomInput";
+import { Snackbar } from "@mui/material";
 import useAction from "../../../hooks/useAction";
 import { StyledWrapper } from "./style";
 
@@ -14,7 +17,22 @@ const Authorization = () => {
     userError: "",
     passwordError: "",
   });
+  const [snackbar, setSnackbar] = useState({ open: false, message: "" });
+
+  const errors = useSelector((state) => state.user.error);
+
   const { loginUser } = useAction();
+
+  useEffect(() => {
+    if (errors && errors.length > 0) {
+      setSnackbar({
+        ...snackbar,
+        open: true,
+        message:
+          "Извините, произошла ошибка. Проверьте даннные, которые вы вводили.",
+      });
+    }
+  }, [errors]);
 
   const handleChangeInput = (e) => {
     setUser({
@@ -85,6 +103,14 @@ const Authorization = () => {
           required
         />
       </FormData>
+      {snackbar.open && (
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={6000}
+          onClose={() => setSnackbar({ open: false, message: "" })}
+          message={snackbar.message}
+        />
+      )}
     </StyledWrapper>
   );
 };
